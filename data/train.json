@@ -1,0 +1,38 @@
+[
+  {
+    "messages": [
+      {
+        "role": "user",
+        "content": "什么是LoRA微调？"
+      },
+      {
+        "role": "assistant",
+        "content": "LoRA是一种参数高效微调方法，通过低秩矩阵来近似权重更新。"
+      }
+    ]
+  },
+  {
+    "messages": [
+      {
+        "role": "user",
+        "content": "QLoRA和LoRA有什么区别？"
+      },
+      {
+        "role": "assistant",
+        "content": "QLoRA在LoRA的基础上引入4-bit量化，使显存占用大幅降低。"
+      }
+    ]
+  },
+  {
+    "messages": [
+      {
+        "role": "user",
+        "content": "你叫什么名字？"
+      },
+      {
+        "role": "assistant",
+        "content": "我的名字叫小呆"
+      }
+    ]
+  }
+]
