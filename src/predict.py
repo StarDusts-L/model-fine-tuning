@@ -7,22 +7,36 @@ model_name = 'Qwen/Qwen3-0.6B'
 model_name_path = 'Qwen\\Qwen3-0.6B'
 model_path = f"I:\\PycharmProjects\\model-test\\model_huggingface\\{model_name_path}"
 trained_dir = f"I:\\PycharmProjects\\model-test\\model_trained\\{model_name_path}\\checkpoint-15"
-base_model = AutoModelForCausalLM.from_pretrained(
-    model_path,
-    quantization_config=config.BNB_CONFIG,
-    device_map="cuda:0"
+merged_model_dir = f"I:\\PycharmProjects\\model-test\\model_trained\\{model_name_path}\\FP16"
+## 加载peft_model
+def load_peft_model():
+    base_model = AutoModelForCausalLM.from_pretrained(
+        model_path,
+        quantization_config=config.BNB_CONFIG,
+        device_map="cuda:0"
 
-)
+    )
+    # PEFT 并不是“复制模型” 而是in-place的，如果要复制使用copy.deepcopy(base_model)
+    peft_model = PeftModel.from_pretrained(base_model,trained_dir)
+    peft_model.print_trainable_parameters()
+    ## trainable params: 0 || all params: 752,205,824 || trainable%: 0.0000
+    ## trainable params: 573,440 || all params: 752,205,824 || trainable%: 0.0762
+    ## trainable params: 0 || all params: 752,062,464 || trainable%: 0.0000
+    ## trainable params: 430,080 || all params: 752,062,464 || trainable%: 0.0572
+    print(peft_model.active_adapter)
+    return peft_model
+def load_base_model():
+    base_model = AutoModelForCausalLM.from_pretrained(
+        merged_model_dir,
+        quantization_config=config.BNB_CONFIG,
+        device_map="cuda:0"
 
-ft_model = PeftModel.from_pretrained(base_model,trained_dir)
+    )
+    return base_model
 tokenizer = AutoTokenizer.from_pretrained(model_path,use_fast=False)
 tokenizer.pad_token = tokenizer.eos_token
-ft_model.print_trainable_parameters()
-## trainable params: 0 || all params: 752,205,824 || trainable%: 0.0000
-## trainable params: 573,440 || all params: 752,205,824 || trainable%: 0.0762
-## trainable params: 0 || all params: 752,062,464 || trainable%: 0.0000
-## trainable params: 430,080 || all params: 752,062,464 || trainable%: 0.0572
-print(base_model.device)
+model= load_base_model()
+print(model.device)
 
 def generate(prompt):
     messages = [
@@ -44,9 +58,9 @@ def generate(prompt):
         enable_thinking=False,
         add_generation_prompt=True,
     )
-    model_inputs = model_inputs.to(base_model.device)
+    model_inputs = model_inputs.to(model.device)
     # conduct text completion
-    generated_ids = base_model.generate(
+    generated_ids = model.generate(
         **model_inputs,
         max_new_tokens=32768
     )

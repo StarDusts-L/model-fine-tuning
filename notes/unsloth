@@ -1,0 +1,4 @@
+pip index versions unsloth
+pip install unsloth[cu121]
+pip install unsloth[torch251]
+pip install unsloth[cu121-torch251]
