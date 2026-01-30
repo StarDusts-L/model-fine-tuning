@@ -1,0 +1,7 @@
+导入ollama
+ollama create qwen3:0.6-ft-q8_0 -f I:\PycharmProjects\model-test\model_gguf\qwen3-ft-fp16-q8_0\Modelfile
+ollama create qwen3:0.6-ft-f16 -f I:\PycharmProjects\model-test\model_gguf\qwen3-ft-fp16-f16\Modelfile_clearn
+
+##资源占用：
+# qwen3:0.6-ft-f16   显存1.7G  存储：n_tensors = 311, total_size = 1.5G
+# qwen3:0.6-ft-q8_0  显存1.1G  存储：n_tensors = 311, total_size = 0.78G
