@@ -1,0 +1,6 @@
+PARAMETER repeat_penalty 1.05
+概率调整‌：对于那些已经在上下文中出现过的 token，模型会在计算其生成概率时，将其概率值除以 repeat_penalty 系数（一个大于1的值）。
+‌惩罚效果‌：
+当 repeat_penalty 大于 1 时，会降低重复 token 的生成概率，从而减少重复内容。
+当 repeat_penalty 等于 1 时，保持原有的生成策略不变。
+当 repeat_penalty 小于 1 时，反而会增加重复 token 的生成概率。
